@@ -11,5 +11,5 @@ public interface MemoRepository {
 
     Optional<Memo> findById(Long id);
 
-    List<Memo> findByDate(LocalDateTime from, LocalDateTime to);
+    // List<Memo> findByDate(LocalDateTime from, LocalDateTime to);
 }

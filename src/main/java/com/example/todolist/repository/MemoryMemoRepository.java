@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-@Repository
+
 public class MemoryMemoRepository implements MemoRepository{
 
     private static final Map<Long, Memo> store = new HashMap<>();
@@ -23,8 +23,7 @@ public class MemoryMemoRepository implements MemoRepository{
 
     @Override
     public List<Memo> findMemoAll() {
-        List<Memo> memos = store.values().stream().toList();
-        return memos;
+        return new ArrayList<Memo>(store.values());
     }
 
     @Override
@@ -32,9 +31,16 @@ public class MemoryMemoRepository implements MemoRepository{
         return Optional.ofNullable(store.get(id));
     }
 
-    @Override
+/*    @Override
     public List<Memo> findByDate(LocalDateTime from, LocalDateTime to) {
-        List<Memo> memoList = store.values().stream().filter(memo -> memo.getCreated().isAfter(from) && memo.getCreated().isBefore(to)).toList();
+        List<Memo> memos = findMemoAll();
+        List<Memo> memoList = new ArrayList<>();
+        for (Memo memo : memos) {
+            if (memo.getDTime().isAfter(from) && memo.getDTime().isBefore(to)) {
+                memoList.add(memo);
+            }
+        }
         return memoList;
     }
+    */
 }
