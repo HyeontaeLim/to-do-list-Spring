@@ -13,11 +13,18 @@ public class MemoServiceImpl implements MemoService{
     private final MemoRepository memoRepository;
 
     public Memo addMemo(Memo newMemo) {
-        Memo createdMemo = memoRepository.memoSave(newMemo);
-        return createdMemo;
+        return memoRepository.memoSave(newMemo);
     }
 
-    public List<Memo> findMemo() {
+    public List<Memo> findMemos() {
         return memoRepository.findMemoAll();
+    }
+
+    public void deleteMemo(Long id) {
+        memoRepository.deleteById(id);
+    }
+
+    public Memo updateMemo(Long id, Memo updatedMemo) {
+        return memoRepository.updateById(id, updatedMemo);
     }
 }

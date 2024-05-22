@@ -7,5 +7,7 @@ import java.util.List;
 
 public interface MemoService {
    Memo addMemo(Memo newMemo);
-   List<Memo> findMemo();
+   List<Memo> findMemos();
+   void deleteMemo(Long id);
+   Memo updateMemo(Long id, Memo updatedMemo);
 }

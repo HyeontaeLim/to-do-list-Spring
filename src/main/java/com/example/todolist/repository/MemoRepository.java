@@ -11,5 +11,9 @@ public interface MemoRepository {
 
     Optional<Memo> findById(Long id);
 
+    void deleteById(Long id);
+
+    Memo updateById(Long id, Memo memo);
+
     // List<Memo> findByDate(LocalDateTime from, LocalDateTime to);
 }

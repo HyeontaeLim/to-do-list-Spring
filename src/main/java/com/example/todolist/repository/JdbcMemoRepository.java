@@ -22,8 +22,8 @@ public class JdbcMemoRepository implements MemoRepository{
 
     @Override
     public Memo memoSave(Memo memo) {
-        String sql = "insert into memo (memo, created, dTime) values (?, now(), now())";
-        template.update(sql, memo.getMemo());
+        String sql = "insert into memo (memo, created, dTime) values (?, ?, ?)";
+        template.update(sql, memo.getMemo(), LocalDateTime.now(), memo.getDTime());
         return memo;
     }
 
@@ -48,6 +48,19 @@ public class JdbcMemoRepository implements MemoRepository{
     public Optional<Memo> findById(Long id) {
         String sql = "select * from memo where id = ?";
         return template.queryForObject(sql, memoRowMapper(), id);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        String sql = "delete from memo where id = ?";
+        template.update(sql, id);
+    }
+
+    @Override
+    public Memo updateById(Long id, Memo memo) {
+        String sql = "update memo set memo = ?, created = ?, dTime = ? where id = ?";
+        template.update(sql, memo.getMemo(),LocalDateTime.now() , memo.getDTime(), id);
+        return memo;
     }
 
     private RowMapper<Optional<Memo>> memoRowMapper() {

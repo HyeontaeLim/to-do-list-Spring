@@ -31,6 +31,16 @@ public class MemoryMemoRepository implements MemoRepository{
         return Optional.ofNullable(store.get(id));
     }
 
+    @Override
+    public void deleteById(Long id) {
+
+    }
+
+    @Override
+    public Memo updateById(Long id, Memo memo) {
+        return null;
+    }
+
 /*    @Override
     public List<Memo> findByDate(LocalDateTime from, LocalDateTime to) {
         List<Memo> memos = findMemoAll();
