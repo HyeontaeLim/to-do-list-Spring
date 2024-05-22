@@ -59,7 +59,7 @@ public class JdbcMemoRepository implements MemoRepository{
     @Override
     public Memo updateById(Long id, Memo memo) {
         String sql = "update memo set memo = ?, created = ?, dTime = ? where id = ?";
-        template.update(sql, memo.getMemo(),LocalDateTime.now() , memo.getDTime(), id);
+        template.update(sql, memo.getMemo(),LocalDateTime.now(), memo.getDTime(), id);
         return memo;
     }
 

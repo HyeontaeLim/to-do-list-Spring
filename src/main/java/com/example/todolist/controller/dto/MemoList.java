@@ -1,16 +1,21 @@
-package com.example.todolist.domain;
+package com.example.todolist.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Data
-public class Memo {
+@Getter
+@Setter
+@RequiredArgsConstructor
+public class MemoList {
     private Long id;
     private String memo;
     private LocalDateTime created;
+    @JsonProperty("dTime")
+    @JsonFormat
     private LocalDateTime dTime;
 }
