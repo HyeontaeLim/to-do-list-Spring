@@ -11,11 +11,16 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class MemoList {
+public class MemoList implements Comparable<MemoList> {
     private Long id;
     private String memo;
     private LocalDateTime created;
     @JsonProperty("dTime")
     @JsonFormat
     private LocalDateTime dTime;
+
+    @Override
+    public int compareTo(MemoList o) {
+        return 0;
+    }
 }

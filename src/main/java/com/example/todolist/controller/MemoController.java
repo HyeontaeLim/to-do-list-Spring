@@ -13,7 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 @CrossOrigin
@@ -24,7 +27,7 @@ public class MemoController {
     private final MemoService memoService;
 
     @GetMapping(value = "/memos", produces = "application/json; charset=UTF-8")
-    public List<MemoList> getMemoList() {
+    public List<MemoList> getMemoList(@RequestParam (name = "orderType", required = false, defaultValue = "dTimeAsc") String orderType) {
         List<Memo> memos = memoService.findMemos();
         List<MemoList> memoLists = new ArrayList<>();
         for (Memo memo : memos) {
@@ -34,6 +37,19 @@ public class MemoController {
             memoList.setCreated(memo.getCreated());
             memoList.setDTime(memo.getDTime());
             memoLists.add(memoList);
+        }
+        if ("createdAsc".equalsIgnoreCase(orderType)) {
+            memoLists.sort(Comparator.comparing(MemoList::getCreated));
+            return memoLists.reversed();
+        } else if ("createdDsc".equalsIgnoreCase(orderType)) {
+            memoLists.sort(Comparator.comparing(MemoList::getCreated));
+            return memoLists;
+        } else if ("dTimeAsc".equalsIgnoreCase(orderType)) {
+            memoLists.sort(Comparator.comparing(MemoList::getDTime));
+            return memoLists.reversed();
+        } else if ("dTimeDsc".equalsIgnoreCase(orderType)) {
+            memoLists.sort(Comparator.comparing(MemoList::getDTime));
+            return memoLists;
         }
         return memoLists;
     }
