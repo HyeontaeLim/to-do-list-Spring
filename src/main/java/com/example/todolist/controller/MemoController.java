@@ -1,21 +1,13 @@
 package com.example.todolist.controller;
 
-import com.example.todolist.controller.dto.AddMemo;
-import com.example.todolist.controller.dto.MemoList;
-import com.example.todolist.controller.dto.UpdateMemo;
+import com.example.todolist.controller.dto.AddUpdateMemoForm;
+import com.example.todolist.controller.dto.MemoForm;
 import com.example.todolist.domain.Memo;
 import com.example.todolist.service.MemoService;
-import com.example.todolist.service.MemoServiceImpl;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -27,40 +19,40 @@ public class MemoController {
     private final MemoService memoService;
 
     @GetMapping(value = "/memos", produces = "application/json; charset=UTF-8")
-    public List<MemoList> getMemoList(@RequestParam (name = "orderType", required = false, defaultValue = "dTimeAsc") String orderType) {
+    public List<MemoForm> getMemoList(@RequestParam (name = "orderType", required = false) OrderType orderType) {
         List<Memo> memos = memoService.findMemos();
-        List<MemoList> memoLists = new ArrayList<>();
+        List<MemoForm> memoForms = new ArrayList<>();
         for (Memo memo : memos) {
-            MemoList memoList = new MemoList();
-            memoList.setId(memo.getId());
-            memoList.setMemo(memo.getMemo());
-            memoList.setCreated(memo.getCreated());
-            memoList.setDTime(memo.getDTime());
-            memoLists.add(memoList);
+            MemoForm memoForm = new MemoForm();
+            memoForm.setId(memo.getId());
+            memoForm.setMemo(memo.getMemo());
+            memoForm.setCreated(memo.getCreated());
+            memoForm.setDTime(memo.getDTime());
+            memoForms.add(memoForm);
         }
-        if ("createdAsc".equalsIgnoreCase(orderType)) {
-            memoLists.sort(Comparator.comparing(MemoList::getCreated));
-            return memoLists.reversed();
-        } else if ("createdDsc".equalsIgnoreCase(orderType)) {
-            memoLists.sort(Comparator.comparing(MemoList::getCreated));
-            return memoLists;
-        } else if ("dTimeAsc".equalsIgnoreCase(orderType)) {
-            memoLists.sort(Comparator.comparing(MemoList::getDTime));
-            return memoLists.reversed();
-        } else if ("dTimeDsc".equalsIgnoreCase(orderType)) {
-            memoLists.sort(Comparator.comparing(MemoList::getDTime));
-            return memoLists;
+        if (OrderType.CreatedAsc.equals(orderType)) {
+            memoForms.sort(Comparator.comparing(MemoForm::getCreated));
+            return memoForms.reversed();
+        } else if (OrderType.CreatedDsc.equals(orderType)) {
+            memoForms.sort(Comparator.comparing(MemoForm::getCreated));
+            return memoForms;
+        } else if (OrderType.DTimeAsc.equals(orderType)) {
+            memoForms.sort(Comparator.comparing(MemoForm::getDTime));
+            return memoForms.reversed();
+        } else if (OrderType.DTimeDsc.equals(orderType)) {
+            memoForms.sort(Comparator.comparing(MemoForm::getDTime));
+            return memoForms;
         }
-        return memoLists;
+        return memoForms;
     }
 
     @PostMapping("/memos")
-    public void addMemo(@RequestBody AddMemo addMemo) {
+    public void addMemo(@RequestBody AddUpdateMemoForm addUpdateMemoForm) {
         Memo memo = new Memo();
-        log.info("addMemo.getMemo() ={}", addMemo.getMemo());
-        log.info("addMemo.getDTime() ={}", addMemo.getDTime());
-        memo.setMemo(addMemo.getMemo());
-        memo.setDTime(addMemo.getDTime());
+        log.info("addMemo.getMemo()={}", addUpdateMemoForm.getMemo());
+        log.info("addMemo.getDTime()={}", addUpdateMemoForm.getDTime());
+        memo.setMemo(addUpdateMemoForm.getMemo());
+        memo.setDTime(addUpdateMemoForm.getDTime());
         memoService.addMemo(memo);
     }
 
@@ -70,12 +62,12 @@ public class MemoController {
     }
 
     @PutMapping("/memos/{id}")
-    public void updateMemo(@RequestBody UpdateMemo updateMemo, @PathVariable ("id") Long id) {
+    public void updateMemo(@RequestBody AddUpdateMemoForm addUpdateMemoForm, @PathVariable ("id") Long id) {
         Memo memo = new Memo();
-        log.info("updateMemo.getMemo() ={}", updateMemo.getMemo());
-        log.info("updateMemo.getDTime() ={}", updateMemo.getDTime());
-        memo.setMemo(updateMemo.getMemo());
-        memo.setDTime(updateMemo.getDTime());
+        log.info("updateMemo.getMemo()={}", addUpdateMemoForm.getMemo());
+        log.info("updateMemo.getDTime()={}", addUpdateMemoForm.getDTime());
+        memo.setMemo(addUpdateMemoForm.getMemo());
+        memo.setDTime(addUpdateMemoForm.getDTime());
         memoService.updateMemo(id, memo);
     }
 }

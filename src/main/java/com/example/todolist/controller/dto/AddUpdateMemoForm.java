@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class AddMemo {
+public class AddUpdateMemoForm {
     private String memo;
 
     @JsonProperty("dTime")

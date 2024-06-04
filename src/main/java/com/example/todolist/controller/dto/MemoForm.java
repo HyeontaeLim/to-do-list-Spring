@@ -11,10 +11,12 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class UpdateMemo {
+public class MemoForm {
+    private Long id;
     private String memo;
-
+    private LocalDateTime created;
     @JsonProperty("dTime")
     @JsonFormat
     private LocalDateTime dTime;
+
 }
