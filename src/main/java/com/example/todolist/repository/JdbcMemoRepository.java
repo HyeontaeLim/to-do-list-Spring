@@ -23,7 +23,7 @@ public class JdbcMemoRepository implements MemoRepository{
     @Override
     public Memo memoSave(Memo memo) {
         String sql = "insert into memo (memo, created, dTime) values (?, ?, ?)";
-        template.update(sql, memo.getMemo(), LocalDateTime.now(), memo.getDTime());
+        template.update(sql, memo.getMemo(), memo.getCreated(), memo.getDTime());
         return memo;
     }
 
