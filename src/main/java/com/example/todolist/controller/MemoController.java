@@ -6,14 +6,12 @@ import com.example.todolist.controller.errorDto.FieldErrorDetail;
 import com.example.todolist.controller.errorDto.ValidationResult;
 import com.example.todolist.domain.Memo;
 import com.example.todolist.service.MemoService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +34,7 @@ public class MemoController {
         List<MemoForm> memoForms = new ArrayList<>();
         for (Memo memo : memos) {
             MemoForm memoForm = new MemoForm();
-            memoForm.setId(memo.getId());
+            memoForm.setMemoId(memo.getMemoId());
             memoForm.setMemo(memo.getMemo());
             memoForm.setCreated(memo.getCreated());
             memoForm.setDTime(memo.getDTime());
@@ -81,13 +79,13 @@ public class MemoController {
         return memoService.addMemo(memo);
     }
 
-    @DeleteMapping("/memos/{id}")
-    public void deleteMemo(@PathVariable ("id") Long id) {
-        memoService.deleteMemo(id);
+    @DeleteMapping("/memos/{memoId}")
+    public void deleteMemo(@PathVariable ("memoId") Long memoId) {
+        memoService.deleteMemo(memoId);
     }
 
-    @PutMapping(value = "/memos/{id}", produces = "application/json; charset=UTF-8")
-    public Object updateMemo(@Validated @RequestBody AddUpdateMemoForm addUpdateMemoForm, BindingResult bindingResult, @PathVariable ("id") Long id, HttpServletResponse response) {
+    @PutMapping(value = "/memos/{memoId}", produces = "application/json; charset=UTF-8")
+    public Object updateMemo(@Validated @RequestBody AddUpdateMemoForm addUpdateMemoForm, BindingResult bindingResult, @PathVariable ("memoId") Long memoId, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             log.info("검즘 오류 발생 errors = {}", bindingResult);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -105,7 +103,7 @@ public class MemoController {
         log.info("updateMemo.getDTime()={}", addUpdateMemoForm.getDTime());
         memo.setMemo(addUpdateMemoForm.getMemo());
         memo.setDTime(addUpdateMemoForm.getDTime());
-        return memoService.updateMemo(id, memo);
+        return memoService.updateMemo(memoId, memo);
 
     }
 }

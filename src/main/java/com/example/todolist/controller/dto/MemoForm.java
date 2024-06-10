@@ -3,7 +3,6 @@ package com.example.todolist.controller.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class MemoForm {
 
-    private Long id;
+    private Long memoId;
     @NotBlank
     private String memo;
     @NotNull

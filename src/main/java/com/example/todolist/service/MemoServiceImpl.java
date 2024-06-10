@@ -5,6 +5,7 @@ import com.example.todolist.repository.MemoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,15 +22,15 @@ public class MemoServiceImpl implements MemoService{
         return memoRepository.findMemoAll();
     }
 
-    public Optional<Memo> findMemo(Long id) {
-        return memoRepository.findById(id);
+    public Optional<Memo> findMemo(Long memoId) {
+        return memoRepository.findById(memoId);
     }
 
-    public void deleteMemo(Long id) {
-        memoRepository.deleteById(id);
+    public void deleteMemo(Long memoId) {
+        memoRepository.deleteById(memoId);
     }
 
-    public Memo updateMemo(Long id, Memo updatedMemo) {
-        return memoRepository.updateById(id, updatedMemo);
+    public Memo updateMemo(Long memoId, Memo updatedMemo) {
+        return memoRepository.updateById(memoId, updatedMemo);
     }
 }

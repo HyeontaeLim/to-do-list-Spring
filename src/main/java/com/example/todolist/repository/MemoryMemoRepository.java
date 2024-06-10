@@ -1,10 +1,8 @@
 package com.example.todolist.repository;
 
 import com.example.todolist.domain.Memo;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 
@@ -15,9 +13,9 @@ public class MemoryMemoRepository implements MemoRepository{
 
     @Override
     public Memo memoSave(Memo memo) {
-        memo.setId(++sequence);
+        memo.setMemoId(++sequence);
         memo.setCreated(LocalDateTime.now());
-        store.put(memo.getId(), memo);
+        store.put(memo.getMemoId(), memo);
         return memo;
     }
 
@@ -27,17 +25,17 @@ public class MemoryMemoRepository implements MemoRepository{
     }
 
     @Override
-    public Optional<Memo> findById(Long id) {
-        return Optional.ofNullable(store.get(id));
+    public Optional<Memo> findById(Long memoId) {
+        return Optional.ofNullable(store.get(memoId));
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long memoId) {
 
     }
 
     @Override
-    public Memo updateById(Long id, Memo memo) {
+    public Memo updateById(Long memoId, Memo memo) {
         return null;
     }
 

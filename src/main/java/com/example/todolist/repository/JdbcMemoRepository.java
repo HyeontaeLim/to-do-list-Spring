@@ -3,12 +3,15 @@ package com.example.todolist.repository;
 import com.example.todolist.domain.Memo;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -22,8 +25,18 @@ public class JdbcMemoRepository implements MemoRepository{
 
     @Override
     public Memo memoSave(Memo memo) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "insert into memo (memo, created, dTime) values (?, ?, ?)";
-        template.update(sql, memo.getMemo(), memo.getCreated(), memo.getDTime());
+        template.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"memoId"});
+            ps.setString(1, memo.getMemo());
+            ps.setTimestamp(2, Timestamp.valueOf(memo.getCreated()));
+            ps.setTimestamp(3, Timestamp.valueOf(memo.getDTime()));
+            return ps;
+        }, keyHolder
+    );
+        Long generatedId = keyHolder.getKey().longValue();
+        memo.setMemoId(generatedId);
         return memo;
     }
 
@@ -36,7 +49,7 @@ public class JdbcMemoRepository implements MemoRepository{
     private RowMapper<Memo> memosRowMapper() {
         return (rs, rowNum) -> {
             Memo memo = new Memo();
-            memo.setId(rs.getLong("id"));
+            memo.setMemoId(rs.getLong("memoId"));
             memo.setMemo(rs.getString("memo"));
             memo.setCreated(rs.getTimestamp("created").toLocalDateTime());
             memo.setDTime(rs.getTimestamp("dTime").toLocalDateTime());
@@ -45,28 +58,28 @@ public class JdbcMemoRepository implements MemoRepository{
     }
 
     @Override
-    public Optional<Memo> findById(Long id) {
-        String sql = "select * from memo where id = ?";
-        return template.queryForObject(sql, memoRowMapper(), id);
+    public Optional<Memo> findById(Long memoId) {
+        String sql = "select * from memo where memoId = ?";
+        return template.queryForObject(sql, memoRowMapper(), memoId);
     }
 
     @Override
-    public void deleteById(Long id) {
-        String sql = "delete from memo where id = ?";
-        template.update(sql, id);
+    public void deleteById(Long memoId) {
+        String sql = "delete from memo where memoId = ?";
+        template.update(sql, memoId);
     }
 
     @Override
-    public Memo updateById(Long id, Memo memo) {
-        String sql = "update memo set memo = ?, created = ?, dTime = ? where id = ?";
-        template.update(sql, memo.getMemo(),LocalDateTime.now(), memo.getDTime(), id);
+    public Memo updateById(Long memoId, Memo memo) {
+        String sql = "update memo set memo = ?, created = ?, dTime = ? where memoId = ?";
+        template.update(sql, memo.getMemo(),LocalDateTime.now(), memo.getDTime(), memoId);
         return memo;
     }
 
     private RowMapper<Optional<Memo>> memoRowMapper() {
         return (rs, rowNum) -> {
             Memo memo = new Memo();
-            memo.setId(rs.getLong("id"));
+            memo.setMemoId(rs.getLong("memoId"));
             memo.setMemo(rs.getString("memo"));
             memo.setCreated(rs.getTimestamp("created").toLocalDateTime());
             memo.setDTime(rs.getTimestamp("dTime").toLocalDateTime());
