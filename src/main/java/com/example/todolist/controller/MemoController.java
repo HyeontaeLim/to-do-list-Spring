@@ -6,6 +6,7 @@ import com.example.todolist.controller.errorDto.FieldErrorDetail;
 import com.example.todolist.controller.errorDto.ValidationResult;
 import com.example.todolist.domain.Memo;
 import com.example.todolist.service.MemoService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -85,13 +86,26 @@ public class MemoController {
         memoService.deleteMemo(id);
     }
 
-    @PutMapping("/memos/{id}")
-    public void updateMemo(@Validated @RequestBody AddUpdateMemoForm addUpdateMemoForm, BindingResult bindingResult, @PathVariable ("id") Long id) {
+    @PutMapping(value = "/memos/{id}", produces = "application/json; charset=UTF-8")
+    public Object updateMemo(@Validated @RequestBody AddUpdateMemoForm addUpdateMemoForm, BindingResult bindingResult, @PathVariable ("id") Long id, HttpServletResponse response) {
+        if (bindingResult.hasErrors()) {
+            log.info("검즘 오류 발생 errors = {}", bindingResult);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            List<FieldError> allErrors = bindingResult.getFieldErrors();
+            List<FieldErrorDetail> errors = new ArrayList<>();
+            for (FieldError error : allErrors) {
+                FieldErrorDetail fieldErrorDetail1 = new FieldErrorDetail(error.getField(), error.getCodes(), error.getRejectedValue(), messageSource.getMessage(error, response.getLocale()));
+                errors.add(fieldErrorDetail1);
+            }
+            return new ValidationResult(errors);
+        }
+
         Memo memo = new Memo();
         log.info("updateMemo.getMemo()={}", addUpdateMemoForm.getMemo());
         log.info("updateMemo.getDTime()={}", addUpdateMemoForm.getDTime());
         memo.setMemo(addUpdateMemoForm.getMemo());
         memo.setDTime(addUpdateMemoForm.getDTime());
-        memoService.updateMemo(id, memo);
+        return memoService.updateMemo(id, memo);
+
     }
 }
