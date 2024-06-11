@@ -1,4 +1,4 @@
-package com.example.todolist.domain;
+package com.example.todolist.domain.memo;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

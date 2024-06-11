@@ -1,4 +1,4 @@
-package com.example.todolist.controller;
+package com.example.todolist.domain.memo;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

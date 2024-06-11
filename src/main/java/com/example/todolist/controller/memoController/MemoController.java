@@ -1,10 +1,11 @@
-package com.example.todolist.controller;
+package com.example.todolist.controller.memoController;
 
-import com.example.todolist.controller.dto.AddUpdateMemoForm;
-import com.example.todolist.controller.dto.MemoForm;
+import com.example.todolist.controller.memoController.dto.AddUpdateMemoForm;
+import com.example.todolist.controller.memoController.dto.MemoForm;
 import com.example.todolist.controller.errorDto.FieldErrorDetail;
 import com.example.todolist.controller.errorDto.ValidationResult;
-import com.example.todolist.domain.Memo;
+import com.example.todolist.domain.memo.Memo;
+import com.example.todolist.domain.memo.OrderType;
 import com.example.todolist.service.MemoService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -61,14 +62,7 @@ public class MemoController {
 
         if (bindingResult.hasErrors()) {
             log.info("검즘 오류 발생 errors = {}", bindingResult);
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            List<FieldError> allErrors = bindingResult.getFieldErrors();
-            List<FieldErrorDetail> errors = new ArrayList<>();
-            for (FieldError error : allErrors) {
-                FieldErrorDetail fieldErrorDetail1 = new FieldErrorDetail(error.getField(), error.getCodes(), error.getRejectedValue(), messageSource.getMessage(error, response.getLocale()));
-                errors.add(fieldErrorDetail1);
-            }
-            return new ValidationResult(errors);
+            return new ValidationResult(bindingResult, response, messageSource);
         }
         Memo memo = new Memo();
         log.info("addMemo.getMemo()={}", addUpdateMemoForm.getMemo());
@@ -88,14 +82,7 @@ public class MemoController {
     public Object updateMemo(@Validated @RequestBody AddUpdateMemoForm addUpdateMemoForm, BindingResult bindingResult, @PathVariable ("memoId") Long memoId, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             log.info("검즘 오류 발생 errors = {}", bindingResult);
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            List<FieldError> allErrors = bindingResult.getFieldErrors();
-            List<FieldErrorDetail> errors = new ArrayList<>();
-            for (FieldError error : allErrors) {
-                FieldErrorDetail fieldErrorDetail1 = new FieldErrorDetail(error.getField(), error.getCodes(), error.getRejectedValue(), messageSource.getMessage(error, response.getLocale()));
-                errors.add(fieldErrorDetail1);
-            }
-            return new ValidationResult(errors);
+            return new ValidationResult(bindingResult, response, messageSource);
         }
 
         Memo memo = new Memo();

@@ -1,9 +1,7 @@
 package com.example.todolist.service;
 
-import com.example.todolist.domain.Memo;
+import com.example.todolist.domain.memo.Memo;
 
-import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

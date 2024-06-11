@@ -1,6 +1,6 @@
-package com.example.todolist.repository;
+package com.example.todolist.repository.memoRepository;
 
-import com.example.todolist.domain.Memo;
+import com.example.todolist.domain.memo.Memo;
 
 import java.time.LocalDateTime;
 import java.util.*;

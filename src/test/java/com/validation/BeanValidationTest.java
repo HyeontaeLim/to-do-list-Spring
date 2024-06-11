@@ -1,6 +1,6 @@
 package com.validation;
 
-import com.example.todolist.controller.dto.AddUpdateMemoForm;
+import com.example.todolist.controller.memoController.dto.AddUpdateMemoForm;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

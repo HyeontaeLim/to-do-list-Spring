@@ -11,9 +11,10 @@ create table memo (
 drop table if exists member CASCADE;
 create table member (
     memberId bigint NOT NULL AUTO_INCREMENT,
-    password text NOT NULL,
-    name DATETIME NOT NULL,
-    gender DATETime NOT NULL,
+    username VARCHAR(255) NOT NULL ,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    gender VARCHAR(10) NOT NULL,
     email VARCHAR(255),
     PRIMARY KEY (memberId)
 );
