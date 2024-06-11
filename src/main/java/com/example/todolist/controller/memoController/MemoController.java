@@ -2,7 +2,6 @@ package com.example.todolist.controller.memoController;
 
 import com.example.todolist.controller.memoController.dto.AddUpdateMemoForm;
 import com.example.todolist.controller.memoController.dto.MemoForm;
-import com.example.todolist.controller.errorDto.FieldErrorDetail;
 import com.example.todolist.controller.errorDto.ValidationResult;
 import com.example.todolist.domain.memo.Memo;
 import com.example.todolist.domain.memo.OrderType;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

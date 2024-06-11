@@ -23,5 +23,6 @@ public class MemberForm {
     @NotNull
     private Gender gender;
     @Email
+    @NotBlank
     private String email;
 }

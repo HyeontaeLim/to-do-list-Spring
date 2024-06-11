@@ -21,5 +21,6 @@ public class AddUpdateMemberForm {
     @NotNull
     private Gender gender;
     @Email
+    @NotBlank
     private String email;
 }
