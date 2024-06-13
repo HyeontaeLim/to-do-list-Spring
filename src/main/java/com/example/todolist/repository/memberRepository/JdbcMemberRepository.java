@@ -2,6 +2,7 @@ package com.example.todolist.repository.memberRepository;
 
 import com.example.todolist.domain.member.Gender;
 import com.example.todolist.domain.member.Member;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -56,7 +57,11 @@ public class JdbcMemberRepository implements MemberRepository {
     @Override
     public Optional<Member> findByUsername(String username) {
         String sql = "select * from member where username = ?";
-        return template.queryForObject(sql, memberRowMapper(), username);
+        try {
+            return template.queryForObject(sql, memberRowMapper(), username);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -78,7 +83,7 @@ public class JdbcMemberRepository implements MemberRepository {
             member.setMemberId(rs.getLong("memberId"));
             member.setUsername(rs.getString("username"));
             member.setName(rs.getString("name"));
-            member.setPassword(rs.getString("dTime"));
+            member.setPassword(rs.getString("password"));
             member.setGender(Gender.valueOf(rs.getString("gender")));
             member.setEmail(rs.getString("email"));
             return member;
@@ -91,7 +96,7 @@ public class JdbcMemberRepository implements MemberRepository {
             member.setMemberId(rs.getLong("memberId"));
             member.setUsername(rs.getString("username"));
             member.setName(rs.getString("name"));
-            member.setPassword(rs.getString("dTime"));
+            member.setPassword(rs.getString("password"));
             member.setGender(Gender.valueOf(rs.getString("gender")));
             member.setEmail(rs.getString("email"));
             return Optional.of(member);
