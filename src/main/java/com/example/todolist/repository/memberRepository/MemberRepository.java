@@ -1,7 +1,6 @@
 package com.example.todolist.repository.memberRepository;
 
 import com.example.todolist.domain.member.Member;
-import com.example.todolist.domain.memo.Memo;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +11,8 @@ public interface MemberRepository {
     List<Member> findMemberAll();
 
     Optional<Member> findById(Long memberId);
+
+    Optional<Member> findByUsername(String username);
 
     void deleteById(Long memberId);
 

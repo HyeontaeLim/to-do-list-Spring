@@ -4,6 +4,8 @@ import com.example.todolist.controller.errorDto.ValidationResult;
 import com.example.todolist.controller.memberController.dto.AddUpdateMemberForm;
 import com.example.todolist.domain.member.Member;
 import com.example.todolist.repository.memberRepository.MemberRepository;
+import com.example.todolist.service.MemberService;
+import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class MemberController {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final MessageSource messageSource;
 
     @PostMapping(value = "/members", produces = "application/json; charset=UTF-8")
     Object registerMember(@RequestBody @Validated AddUpdateMemberForm addUpdateMemberForm, BindingResult bindingResult, HttpServletResponse response) {
+        if (!addUpdateMemberForm.getPassword().equals(addUpdateMemberForm.getPasswordConfirmation())) {
+            bindingResult.rejectValue("passwordConfirmation", "NotMatchingPassword");
+        }
+
         if (bindingResult.hasErrors()) {
             log.info("bindingResult = {}", bindingResult);
             return new ValidationResult(bindingResult, response, messageSource);
@@ -37,6 +43,7 @@ public class MemberController {
         member.setEmail(addUpdateMemberForm.getEmail());
         member.setUsername(addUpdateMemberForm.getUsername());
         member.setGender(addUpdateMemberForm.getGender());
-        return memberRepository.memberSave(member);
+        return memberService.save(member);
+
     }
 }

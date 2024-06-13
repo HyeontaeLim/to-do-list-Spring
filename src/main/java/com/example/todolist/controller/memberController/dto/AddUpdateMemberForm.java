@@ -17,6 +17,8 @@ public class AddUpdateMemberForm {
     @NotBlank
     private String password;
     @NotBlank
+    private String passwordConfirmation;
+    @NotBlank
     private String name;
     @NotNull
     private Gender gender;

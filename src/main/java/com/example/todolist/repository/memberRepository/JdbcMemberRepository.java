@@ -1,21 +1,20 @@
 package com.example.todolist.repository.memberRepository;
 
-import com.example.todolist.controller.memberController.dto.AddUpdateMemberForm;
+import com.example.todolist.domain.member.Gender;
 import com.example.todolist.domain.member.Member;
-import com.example.todolist.domain.memo.Memo;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class JdbcMemberRepository implements MemberRepository{
+public class JdbcMemberRepository implements MemberRepository {
     private final JdbcTemplate template;
 
     public JdbcMemberRepository(DataSource dataSource) {
@@ -44,21 +43,58 @@ public class JdbcMemberRepository implements MemberRepository{
 
     @Override
     public List<Member> findMemberAll() {
-        return List.of();
+        String sql = "select * from member";
+        return template.query(sql, membersRowMapper());
     }
 
     @Override
     public Optional<Member> findById(Long memberId) {
-        return Optional.empty();
+        String sql = "select * from member where memberId = ?";
+        return template.queryForObject(sql, memberRowMapper(), memberId);
+    }
+
+    @Override
+    public Optional<Member> findByUsername(String username) {
+        String sql = "select * from member where username = ?";
+        return template.queryForObject(sql, memberRowMapper(), username);
     }
 
     @Override
     public void deleteById(Long memberId) {
-
+        String sql = "delete from member where memberId = ?";
+        template.update(sql, memberId);
     }
 
     @Override
     public Member updateById(Long memberId, Member member) {
-        return null;
+        String sql = "update member set username = ?, password = ?, name = ?, gender = ? where memberId = ?";
+        template.update(sql, member.getUsername(), member.getPassword(), member.getName(), member.getGender().name(), memberId);
+        return member;
+    }
+
+    private RowMapper<Member> membersRowMapper() {
+        return (rs, rowNum) -> {
+            Member member = new Member();
+            member.setMemberId(rs.getLong("memberId"));
+            member.setUsername(rs.getString("username"));
+            member.setName(rs.getString("name"));
+            member.setPassword(rs.getString("dTime"));
+            member.setGender(Gender.valueOf(rs.getString("gender")));
+            member.setEmail(rs.getString("email"));
+            return member;
+        };
+    }
+
+    private RowMapper<Optional<Member>> memberRowMapper() {
+        return (rs, rowNum) -> {
+            Member member = new Member();
+            member.setMemberId(rs.getLong("memberId"));
+            member.setUsername(rs.getString("username"));
+            member.setName(rs.getString("name"));
+            member.setPassword(rs.getString("dTime"));
+            member.setGender(Gender.valueOf(rs.getString("gender")));
+            member.setEmail(rs.getString("email"));
+            return Optional.of(member);
+        };
     }
 }

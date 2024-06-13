@@ -16,5 +16,6 @@ create table member (
     name VARCHAR(255) NOT NULL,
     gender VARCHAR(10) NOT NULL,
     email VARCHAR(255),
-    PRIMARY KEY (memberId)
+    PRIMARY KEY (memberId),
+    UNIQUE (username, email)
 );
