@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class MemoServiceImpl implements MemoService{
         return memoRepository.memoSave(newMemo);
     }
 
-    public List<Memo> findMemos() {
-        return memoRepository.findMemoAll();
+    public List<Memo> findMemos(Long memberId) {
+        return memoRepository.findMemoByMemberId(memberId);
     }
 
     public Optional<Memo> findMemo(Long memoId) {

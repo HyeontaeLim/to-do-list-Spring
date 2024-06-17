@@ -1,6 +1,8 @@
 package com.example.todolist.repository.memoRepository;
 
 import com.example.todolist.domain.memo.Memo;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -26,12 +28,14 @@ public class JdbcMemoRepository implements MemoRepository{
     @Override
     public Memo memoSave(Memo memo) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = "insert into memo (memo, created, dTime) values (?, ?, ?)";
+        String sql = "insert into memo (memo, created, dTime, isCompleted, memberId) values (?, ?, ?, ?, ?)";
         template.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"memoId"});
             ps.setString(1, memo.getMemo());
             ps.setTimestamp(2, Timestamp.valueOf(memo.getCreated()));
             ps.setTimestamp(3, Timestamp.valueOf(memo.getDTime()));
+            ps.setBoolean(4, memo.getIsCompleted());
+            ps.setLong(5, memo.getMemberId());
             return ps;
         }, keyHolder
     );
@@ -43,8 +47,14 @@ public class JdbcMemoRepository implements MemoRepository{
     @Override
     public List<Memo> findMemoAll() {
         String sql = "select * from memo";
+
         return template.query(sql, memosRowMapper());
     }
+
+    @Override
+    public List<Memo> findMemoByMemberId(Long memberId) {
+        String sql = "select * from memo where memberId = ?";
+        return template.query(sql, memosRowMapper(), memberId);    }
 
     private RowMapper<Memo> memosRowMapper() {
         return (rs, rowNum) -> {
@@ -53,6 +63,8 @@ public class JdbcMemoRepository implements MemoRepository{
             memo.setMemo(rs.getString("memo"));
             memo.setCreated(rs.getTimestamp("created").toLocalDateTime());
             memo.setDTime(rs.getTimestamp("dTime").toLocalDateTime());
+            memo.setIsCompleted(rs.getBoolean("isCompleted"));
+            memo.setMemberId(rs.getLong("memberId"));
             return memo;
         };
     }
@@ -83,6 +95,8 @@ public class JdbcMemoRepository implements MemoRepository{
             memo.setMemo(rs.getString("memo"));
             memo.setCreated(rs.getTimestamp("created").toLocalDateTime());
             memo.setDTime(rs.getTimestamp("dTime").toLocalDateTime());
+            memo.setIsCompleted(rs.getBoolean("isCompleted"));
+            memo.setMemberId(rs.getLong("memberId"));
             return Optional.of(memo);
         };
     }

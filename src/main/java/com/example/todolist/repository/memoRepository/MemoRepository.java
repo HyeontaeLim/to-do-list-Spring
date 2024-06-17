@@ -10,6 +10,8 @@ public interface MemoRepository {
 
     List<Memo> findMemoAll();
 
+    List<Memo> findMemoByMemberId(Long memberId);
+
     Optional<Memo> findById(Long memoId);
 
     void deleteById(Long memoId);

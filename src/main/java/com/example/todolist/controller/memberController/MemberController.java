@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.MessageDigest;
+
 @CrossOrigin
 @RequiredArgsConstructor
 @RestController
@@ -44,6 +46,5 @@ public class MemberController {
         member.setUsername(addUpdateMemberForm.getUsername());
         member.setGender(addUpdateMemberForm.getGender());
         return memberService.save(member);
-
     }
 }

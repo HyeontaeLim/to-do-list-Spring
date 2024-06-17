@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface MemoService {
    Memo addMemo(Memo newMemo);
-   List<Memo> findMemos();
+   List<Memo> findMemos(Long memberId);
 
    Optional<Memo> findMemo(Long memoId);
    void deleteMemo(Long memoId);

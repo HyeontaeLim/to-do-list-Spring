@@ -27,5 +27,9 @@ public class MemoForm {
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dTime;
+    @NotNull
+    private Boolean isCompleted;
+    @NotNull
+    private Long memberId;
 
 }

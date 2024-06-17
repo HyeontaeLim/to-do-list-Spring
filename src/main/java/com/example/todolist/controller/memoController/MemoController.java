@@ -1,11 +1,14 @@
 package com.example.todolist.controller.memoController;
 
+import com.example.todolist.SessionConst;
 import com.example.todolist.controller.memoController.dto.AddUpdateMemoForm;
 import com.example.todolist.controller.memoController.dto.MemoForm;
 import com.example.todolist.controller.errorDto.ValidationResult;
 import com.example.todolist.domain.memo.Memo;
 import com.example.todolist.domain.memo.OrderType;
 import com.example.todolist.service.MemoService;
+import com.mysql.cj.Session;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +31,8 @@ public class MemoController {
     private final MessageSource messageSource;
 
     @GetMapping(value = "/memos", produces = "application/json; charset=UTF-8")
-    public List<MemoForm> getMemoList(@RequestParam (name = "orderType", required = false) OrderType orderType) {
-        List<Memo> memos = memoService.findMemos();
+    public List<MemoForm> getMemoList(@RequestParam (name = "orderType", required = false) OrderType orderType, HttpServletRequest request) {
+        List<Memo> memos = memoService.findMemos((Long) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER));
         List<MemoForm> memoForms = new ArrayList<>();
         for (Memo memo : memos) {
             MemoForm memoForm = new MemoForm();
@@ -37,6 +40,8 @@ public class MemoController {
             memoForm.setMemo(memo.getMemo());
             memoForm.setCreated(memo.getCreated());
             memoForm.setDTime(memo.getDTime());
+            memoForm.setIsCompleted(memo.getIsCompleted());
+            memoForm.setMemberId(memo.getMemberId());
             memoForms.add(memoForm);
         }
         if (OrderType.CreatedAsc.equals(orderType)) {
@@ -56,7 +61,7 @@ public class MemoController {
     }
 
     @PostMapping(value = "/memos", produces = "application/json; charset=UTF-8")
-    public Object addMemo(@Validated @RequestBody AddUpdateMemoForm addUpdateMemoForm, BindingResult bindingResult, HttpServletResponse response) {
+    public Object addMemo(@Validated @RequestBody AddUpdateMemoForm addUpdateMemoForm, BindingResult bindingResult, HttpServletResponse response, HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             log.info("검즘 오류 발생 errors = {}", bindingResult);
@@ -68,6 +73,8 @@ public class MemoController {
         memo.setMemo(addUpdateMemoForm.getMemo());
         memo.setDTime(addUpdateMemoForm.getDTime());
         memo.setCreated(LocalDateTime.now());
+        memo.setIsCompleted(addUpdateMemoForm.isCompleted());
+        memo.setMemberId((Long) request.getSession(false).getAttribute(SessionConst.LOGIN_MEMBER));
         return memoService.addMemo(memo);
     }
 
