@@ -54,7 +54,8 @@ public class JdbcMemoRepository implements MemoRepository{
     @Override
     public List<Memo> findMemoByMemberId(Long memberId) {
         String sql = "select * from memo where memberId = ?";
-        return template.query(sql, memosRowMapper(), memberId);    }
+        return template.query(sql, memosRowMapper(), memberId);
+    }
 
     private RowMapper<Memo> memosRowMapper() {
         return (rs, rowNum) -> {
@@ -83,8 +84,8 @@ public class JdbcMemoRepository implements MemoRepository{
 
     @Override
     public Memo updateById(Long memoId, Memo memo) {
-        String sql = "update memo set memo = ?, created = ?, dTime = ? where memoId = ?";
-        template.update(sql, memo.getMemo(),LocalDateTime.now(), memo.getDTime(), memoId);
+        String sql = "update memo set memo = ?, dTime = ?, isCompleted = ? where memoId = ?";
+        template.update(sql, memo.getMemo(), memo.getDTime(), memo.getIsCompleted(), memoId);
         return memo;
     }
 

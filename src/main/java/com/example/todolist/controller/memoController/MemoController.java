@@ -73,7 +73,7 @@ public class MemoController {
         memo.setMemo(addUpdateMemoForm.getMemo());
         memo.setDTime(addUpdateMemoForm.getDTime());
         memo.setCreated(LocalDateTime.now());
-        memo.setIsCompleted(addUpdateMemoForm.isCompleted());
+        memo.setIsCompleted(addUpdateMemoForm.getIsCompleted());
         memo.setMemberId((Long) request.getSession(false).getAttribute(SessionConst.LOGIN_MEMBER));
         return memoService.addMemo(memo);
     }
@@ -95,6 +95,7 @@ public class MemoController {
         log.info("updateMemo.getDTime()={}", addUpdateMemoForm.getDTime());
         memo.setMemo(addUpdateMemoForm.getMemo());
         memo.setDTime(addUpdateMemoForm.getDTime());
+        memo.setIsCompleted(addUpdateMemoForm.getIsCompleted());
         return memoService.updateMemo(memoId, memo);
 
     }

@@ -24,5 +24,5 @@ public class AddUpdateMemoForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dTime;
     @NotNull
-    private boolean isCompleted;
+    private Boolean isCompleted;
 }
