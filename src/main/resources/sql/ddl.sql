@@ -20,7 +20,3 @@ create table member (
     PRIMARY KEY (memberId),
     UNIQUE (username, email)
 );
-
-insert into member (username, password, name, gender, email) values ("1", "1", "1", "MALE", "1@naver.com");
-
-insert into member (username, password, name, gender, email) values ("2", "2", "2", "FEMALE", "2@naver.com");

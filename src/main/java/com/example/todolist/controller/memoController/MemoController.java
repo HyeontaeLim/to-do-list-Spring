@@ -7,7 +7,6 @@ import com.example.todolist.controller.errorDto.ValidationResult;
 import com.example.todolist.domain.memo.Memo;
 import com.example.todolist.domain.memo.OrderType;
 import com.example.todolist.service.MemoService;
-import com.mysql.cj.Session;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@CrossOrigin
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -75,7 +74,8 @@ public class MemoController {
         memo.setCreated(LocalDateTime.now());
         memo.setIsCompleted(addUpdateMemoForm.getIsCompleted());
         memo.setMemberId((Long) request.getSession(false).getAttribute(SessionConst.LOGIN_MEMBER));
-        return memoService.addMemo(memo);
+        memoService.addMemo(memo);
+        return null;
     }
 
     @DeleteMapping("/memos/{memoId}")
@@ -96,7 +96,7 @@ public class MemoController {
         memo.setMemo(addUpdateMemoForm.getMemo());
         memo.setDTime(addUpdateMemoForm.getDTime());
         memo.setIsCompleted(addUpdateMemoForm.getIsCompleted());
-        return memoService.updateMemo(memoId, memo);
-
+        memoService.updateMemo(memoId, memo);
+        return null;
     }
 }

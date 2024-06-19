@@ -4,6 +4,7 @@ import com.example.todolist.controller.errorDto.ValidationResult;
 import com.example.todolist.controller.memberController.dto.AddUpdateMemberForm;
 import com.example.todolist.domain.member.Member;
 import com.example.todolist.repository.memberRepository.MemberRepository;
+import com.example.todolist.service.AuthService;
 import com.example.todolist.service.MemberService;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.MessageDigest;
 
-@CrossOrigin
+
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -27,6 +28,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MessageSource messageSource;
+    private final AuthService authService;
 
     @PostMapping(value = "/members", produces = "application/json; charset=UTF-8")
     Object registerMember(@RequestBody @Validated AddUpdateMemberForm addUpdateMemberForm, BindingResult bindingResult, HttpServletResponse response) {
@@ -41,10 +43,11 @@ public class MemberController {
 
         Member member = new Member();
         member.setName(addUpdateMemberForm.getName());
-        member.setPassword(addUpdateMemberForm.getPassword());
+        member.setPassword(authService.hashPassword(addUpdateMemberForm.getPassword()));
         member.setEmail(addUpdateMemberForm.getEmail());
         member.setUsername(addUpdateMemberForm.getUsername());
         member.setGender(addUpdateMemberForm.getGender());
-        return memberService.save(member);
+        memberService.save(member);
+        return null;
     }
 }
