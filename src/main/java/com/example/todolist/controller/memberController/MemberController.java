@@ -3,23 +3,17 @@ package com.example.todolist.controller.memberController;
 import com.example.todolist.controller.errorDto.ValidationResult;
 import com.example.todolist.controller.memberController.dto.AddUpdateMemberForm;
 import com.example.todolist.domain.member.Member;
-import com.example.todolist.repository.memberRepository.MemberRepository;
 import com.example.todolist.service.AuthService;
 import com.example.todolist.service.MemberService;
-import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.MessageDigest;
-
 
 @RequiredArgsConstructor
 @RestController

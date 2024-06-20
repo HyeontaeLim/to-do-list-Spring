@@ -13,11 +13,9 @@ public class MemberForm {
     @NotBlank
     private Long memberId;
     @NotBlank
-    @
     private String username;
-    @Size(min = 8)
-    @
     @NotBlank
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[\\d])(?=.*[\\W_]).{8,16}$")
     private String password;
     @NotBlank
     private String name;
