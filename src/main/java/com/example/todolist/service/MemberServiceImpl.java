@@ -20,22 +20,27 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public List<Member> findMemos() {
+    public List<Member> findMembers() {
         return memberRepository.findMemberAll();
     }
 
     @Override
-    public Optional<Member> findMemo(Long memberId) {
+    public Optional<Member> findMember(Long memberId) {
         return memberRepository.findById(memberId);
     }
 
     @Override
-    public void deleteMemo(Long memberId) {
+    public Optional<Member> findMemberByUsername(String username) {
+        return memberRepository.findByUsername(username);
+    }
+
+    @Override
+    public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
     }
 
     @Override
-    public Member updateMemo(Long memoId, Member updatedMember) {
+    public Member updateMember(Long memoId, Member updatedMember) {
         return memberRepository.updateById(memoId, updatedMember);
     }
 }

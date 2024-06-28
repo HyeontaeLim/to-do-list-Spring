@@ -11,10 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin
 @RequiredArgsConstructor
 @RestController
 @Slf4j
@@ -28,6 +30,10 @@ public class MemberController {
     Object registerMember(@RequestBody @Validated AddUpdateMemberForm addUpdateMemberForm, BindingResult bindingResult, HttpServletResponse response) {
         if (!addUpdateMemberForm.getPassword().equals(addUpdateMemberForm.getPasswordConfirmation())) {
             bindingResult.rejectValue("passwordConfirmation", "NotMatchingPassword");
+        }
+
+        if (memberService.findMemberByUsername(addUpdateMemberForm.getUsername()).isPresent()) {
+            bindingResult.rejectValue("username","duplication");
         }
 
         if (bindingResult.hasErrors()) {

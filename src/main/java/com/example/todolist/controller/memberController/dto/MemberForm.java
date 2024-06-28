@@ -15,7 +15,6 @@ public class MemberForm {
     @NotBlank
     private String username;
     @NotBlank
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*[\\d])(?=.*[\\W_]).{8,16}$")
     private String password;
     @NotBlank
     private String name;

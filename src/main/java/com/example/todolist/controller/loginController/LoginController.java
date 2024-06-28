@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -42,11 +42,19 @@ public class LoginController {
         //로그인 성공 처리
         //세션이 있으면 있는 세션 반환, 없으면 신규 세션은 생성
         HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(60*60*3);
+        session.setMaxInactiveInterval(60*60*10);
         //세션에 로그인 회원 정보를 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember.getMemberId());
         //쿠키에 시간 정보를 주지 않으면 세션 쿠키(브라우저 종료시 모두 종료)
 
         return null;
+    }
+
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
     }
 }

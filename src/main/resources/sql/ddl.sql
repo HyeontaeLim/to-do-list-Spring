@@ -1,5 +1,5 @@
-drop table if exists memo CASCADE;
-create table memo (
+
+create table if not exists memo (
     memoId bigint NOT NULL AUTO_INCREMENT,
     memo text NOT NULL,
     created DATETIME NOT NULL,
@@ -9,8 +9,7 @@ create table memo (
     PRIMARY KEY (memoId)
 );
 
-drop table if exists member CASCADE;
-create table member (
+create table if not exists member (
     memberId bigint NOT NULL AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL ,
     password VARCHAR(255) NOT NULL,
@@ -18,5 +17,5 @@ create table member (
     gender VARCHAR(10) NOT NULL,
     email VARCHAR(255),
     PRIMARY KEY (memberId),
-    UNIQUE (username, email)
+    UNIQUE (username)
 );
